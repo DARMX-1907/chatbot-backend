@@ -19,16 +19,20 @@ app.post("/chat", async (req, res) => {
         const userMessage = req.body.message;
         console.log("Pesan masuk:", userMessage);
 
-        const response = await fetch(
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=" + API_KEY,
-            {
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + process.env.GROQ_API_KEY
+                },
                 body: JSON.stringify({
-                    contents: [{ parts: [{ text: userMessage }] }]
+                    model: "llama3-8b-8192",
+                    messages: [{ role: "user", content: userMessage }]
                 })
-            }
-        );
+            });
+
+const data = await response.json();
+const reply = data.choices[0].message.content;
 
         const data = await response.json();
         console.log("GEMINI RESPONSE:", JSON.stringify(data));
