@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const API_KEY = "ISI_API_KEY_KAMU";
+const API_KEY = "AIzaSyCkS2iGGfXEiJ0XuRIom0xZYvm_JNz43GI";
 
 app.post("/chat", async (req, res) => {
     try {
