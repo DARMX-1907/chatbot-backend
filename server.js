@@ -10,6 +10,8 @@ const API_KEY = "AIzaSyCkS2iGGfXEiJ0XuRIom0xZYvm_JNz43GI";
 
 app.post("/chat", async (req, res) => {
     try {
+        const userMessage = req.body.message;
+
         const response = await fetch(
             "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY,
             {
@@ -18,24 +20,32 @@ app.post("/chat", async (req, res) => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    contents: [{
-                        parts: [{ text: req.body.message }]
-                    }]
+                    contents: [
+                        {
+                            parts: [{ text: userMessage }]
+                        }
+                    ]
                 })
             }
         );
 
         const data = await response.json();
 
-        const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Tidak ada respon";
+        console.log("GEMINI RESPONSE:", data); // debug
+
+        const reply =
+            data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+            "AI tidak merespon";
 
         res.json({ reply });
 
-    } catch (err) {
-        res.json({ reply: "Error server" });
+    } catch (error) {
+        console.error(error);
+        res.json({ reply: "Server error" });
     }
 });
 
-app.listen(3000, () => {
-    console.log("Server jalan di http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log("Server jalan di port " + PORT);
 });
