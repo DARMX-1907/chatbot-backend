@@ -2,6 +2,8 @@ import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
 
+console.log("API KEY:", process.env.GEMINI_API_KEY);
+console.log("Request masuk");
 const app = express();
 app.use(cors());
 app.use(express.json());
